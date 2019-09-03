@@ -2,6 +2,11 @@ doctrine:
     dbal:
         # configure these for your database server
         driver: 'pdo_mysql'
+        dbname: conference_planner
+        user: root
+        host: localhost
+        password: root
+        unix_socket: /tmp/mysql.sock
         server_version: '5.7'
         charset: utf8mb4
         default_table_options:

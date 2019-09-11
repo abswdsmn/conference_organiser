@@ -8,23 +8,26 @@ security:
             entity:
                 class: App\Entity\User
                 property: username
-                # if you're using multiple entity managers
-                # manager_name: customer
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            anonymous: false
-            pattern:    ^/
-            http_basic: ~
+            anonymous: true
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                csrf_token_generator: security.csrf.token_manager
             provider: our_db_provider
-
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#firewalls-authentication
+            guard:
+                authenticators:
+                    - App\Security\LoginFormAuthenticator
+            logout:
+                path: app_logout
 
     access_control:
-        # require ROLE_ADMIN for /admin*
-        #- { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/admin, roles: ROLE_USER }
+
+
 
 

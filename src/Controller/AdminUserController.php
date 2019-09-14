@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -17,14 +16,26 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
+/**
+ * Class AdminUserController
+ *
+ * Deals wth creating and editing users.
+ *
+ * @package App\Controller
+ */
 class AdminUserController extends AbstractController
 {
     /**
      * Create a new user.
      *
      * @Route("/admin/user", name="admin_user")
+     *
+     * @param Request $request
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     *
+     * @return Response
      */
-    public function adminCreateUser(Request $request, UserPasswordEncoderInterface $passwordEncoder)
+    public function adminCreateUser(Request $request, UserPasswordEncoderInterface $passwordEncoder) : Response
     {
         // Will return an active user with ROLE_USER.
         $user = new User();
@@ -41,8 +52,7 @@ class AdminUserController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid())
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
             $user->setPassword(
                 $passwordEncoder->encodePassword(
                     $user,
@@ -60,10 +70,13 @@ class AdminUserController extends AbstractController
         return $this->render('user.html.twig', ['form' => $form->createView()]);
     }
 
+    /**
+     * Registers our user class as the data class.
+     *
+     * @param OptionsResolver $resolver
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => User::class,
-        ));
+        $resolver->setDefaults(['data_class' => User::class]);
     }
 }

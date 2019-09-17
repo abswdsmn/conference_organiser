@@ -1,0 +1,36 @@
+{# templates/users.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% block content %}
+        <p><a href="{{ path('admin_user') }}">make new user</a></p>
+        <table>
+            <tr>
+                <th>id</th>
+                <th>email</th>
+                <th>username</th>
+                <th>isActive</th>
+                <th>roles</th>
+                <th>edit profile link</th>
+                <th>edit password link</th>
+            </tr>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.isActive }}</td>
+                    <td>
+                        <ul>
+                            {% for role in user.roles %}
+                                <li>{{ role }}</li>
+                            {%  endfor %}
+                        </ul>
+                    </td>
+                    <td><a href="{{ path('admin_user_edit', {'id': user.id}) }}">edit profile</a></td>
+                    <td><a href="{{ path('admin_password_change', {'id': user.id}) }}">change password</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endblock %}
+{% endblock %}

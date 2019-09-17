@@ -6,6 +6,13 @@
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
+{#    {% if error %}#}
+{#        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>#}
+{#    {% endif %}#}
+
+    {% if app.user %}
+    <div class="checkbox mb-3">You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+        {% endif %}
         {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}
     </body>

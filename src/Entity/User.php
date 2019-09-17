@@ -61,7 +61,6 @@ class User implements UserInterface, \Serializable
     /**
      * @var string
      *
-     * @Assert\NotBlank()
      * @Assert\Length(max=4096)
      */
     private $plainPassword;
@@ -221,7 +220,9 @@ class User implements UserInterface, \Serializable
      */
     public function setPassword(string $password) : self
     {
-        $this->password = $password;
+        if (!is_null($password)) {
+            $this->password = $password;
+        }
 
         return $this;
     }

@@ -141,6 +141,24 @@ class User implements UserInterface, \Serializable
     }
 
     /**
+     * Sets the roles.
+     *
+     * This isn't an append operation. It will
+     * replace all of the roles with the supplied
+     * array.
+     *
+     * @param array $roles
+     *
+     * @return User
+     */
+    public function setRoles(array $roles) : self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
      * Can be used to erase sensitive user data.
      *
      * Currently unused.

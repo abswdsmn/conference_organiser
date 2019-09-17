@@ -40,4 +40,50 @@ class PublicController extends AbstractController
     {
         return $this->render('home.html.twig');
     }
+
+    /**
+     * Register a new user.
+     *
+     * @Route("/register", name="register")
+     *
+     * @param Request $request
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     *
+     * @return Response
+     */
+    public function registerUser(Request $request, UserPasswordEncoderInterface $passwordEncoder) : Response
+    {
+        // Will return an active user with ROLE_APPLICANT.
+        $user = new User();
+        $user->setRoles(['ROLE_APPLICANT']);
+        $form = $this->createFormBuilder($user)
+            ->add('email', EmailType::class)
+            ->add('username', TextType::class)
+            ->add('plainPassword', RepeatedType::class, [
+                'type' => PasswordType::class,
+                'first_options' => ['label' => 'Password'],
+                'second_options' => ['label' => 'Repeat Password'],
+            ])
+            ->add('save', SubmitType::class, array('label' => 'Register'))
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword(
+                $passwordEncoder->encodePassword(
+                    $user,
+                    $form->get('plainPassword')->getData()
+                )
+            );
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('admin_user');
+        }
+
+        return $this->render('user.html.twig', ['form' => $form->createView()]);
+    }
 }

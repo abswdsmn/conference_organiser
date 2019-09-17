@@ -166,7 +166,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         }
 
         // Else go to the admin users page.
-        return new RedirectResponse($this->urlGenerator->generate('admin_users'));
+        return new RedirectResponse($this->urlGenerator->generate('home'));
     }
 
     /**

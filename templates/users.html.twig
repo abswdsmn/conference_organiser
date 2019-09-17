@@ -4,15 +4,14 @@
 {% block body %}
     {% block content %}
         <p><a href="{{ path('admin_user') }}">make new user</a></p>
-        <table>
+        <table class="table">
             <tr>
                 <th>id</th>
                 <th>email</th>
                 <th>username</th>
                 <th>isActive</th>
                 <th>roles</th>
-                <th>edit profile link</th>
-                <th>edit password link</th>
+                <th>actions</th>
             </tr>
             {% for user in users %}
                 <tr>
@@ -27,8 +26,10 @@
                             {%  endfor %}
                         </ul>
                     </td>
-                    <td><a href="{{ path('admin_user_edit', {'id': user.id}) }}">edit profile</a></td>
-                    <td><a href="{{ path('admin_password_change', {'id': user.id}) }}">change password</a></td>
+                    <td>
+                        <a href="{{ path('admin_user_edit', {'id': user.id}) }}"><i class="fas fa-user-edit"></i></a>
+                        <a href="{{ path('admin_password_change', {'id': user.id}) }}"><i class="fas fa-key"></i></a>
+                    </td>
                 </tr>
             {% endfor %}
         </table>

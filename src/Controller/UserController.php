@@ -102,6 +102,7 @@ class UserController extends AbstractController
         $edit_user_form->handleRequest($request);
 
         if ($edit_user_form->isSubmitted() && $edit_user_form->isValid()) {
+            $edit_user->setUpdated(new \DateTime());
             $entity_manager = $this->getDoctrine()->getManager();
             $entity_manager->persist($edit_user);
             $entity_manager->flush();

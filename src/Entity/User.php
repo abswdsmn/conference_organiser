@@ -80,6 +80,16 @@ class User implements UserInterface, \Serializable
     private $roles;
 
     /**
+     * @ORM\Column(type="datetime")
+     */
+    private $created;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $updated;
+
+    /**
      * User constructor.
      *
      * Sets up a new active user with a default role.
@@ -88,6 +98,8 @@ class User implements UserInterface, \Serializable
     {
         $this->isActive = true;
         $this->roles = ['ROLE_USER'];
+        $this->created = new \DateTime();
+        $this->updated = new \DateTime();
     }
 
     /**
@@ -311,5 +323,22 @@ class User implements UserInterface, \Serializable
     public function setPlainPassword(string $password)
     {
         $this->plainPassword = $password;
+    }
+
+    public function getCreated(): ?\DateTimeInterface
+    {
+        return $this->created;
+    }
+
+    public function getUpdated(): ?\DateTimeInterface
+    {
+        return $this->updated;
+    }
+
+    public function setUpdated(\DateTimeInterface $updated): self
+    {
+        $this->updated = $updated;
+
+        return $this;
     }
 }

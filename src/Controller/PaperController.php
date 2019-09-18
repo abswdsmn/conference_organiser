@@ -46,6 +46,8 @@ class PaperController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user = $this->getUser();
+            $user->addPaper($paper);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($paper);
             $entityManager->flush();

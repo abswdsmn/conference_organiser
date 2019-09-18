@@ -3,6 +3,8 @@
 // src/Entity/User.php
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -90,6 +92,11 @@ class User implements UserInterface, \Serializable
     private $updated;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Paper", mappedBy="user", orphanRemoval=true)
+     */
+    private $papers;
+
+    /**
      * User constructor.
      *
      * Sets up a new active user with a default role.
@@ -100,6 +107,7 @@ class User implements UserInterface, \Serializable
         $this->roles = ['ROLE_USER'];
         $this->created = new \DateTime();
         $this->updated = new \DateTime();
+        $this->papers = new ArrayCollection();
     }
 
     /**
@@ -338,6 +346,37 @@ class User implements UserInterface, \Serializable
     public function setUpdated(\DateTimeInterface $updated): self
     {
         $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Paper[]
+     */
+    public function getPapers(): Collection
+    {
+        return $this->papers;
+    }
+
+    public function addPaper(Paper $paper): self
+    {
+        if (!$this->papers->contains($paper)) {
+            $this->papers[] = $paper;
+            $paper->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePaper(Paper $paper): self
+    {
+        if ($this->papers->contains($paper)) {
+            $this->papers->removeElement($paper);
+            // set the owning side to null (unless already changed)
+            if ($paper->getUser() === $this) {
+                $paper->setUser(null);
+            }
+        }
 
         return $this;
     }

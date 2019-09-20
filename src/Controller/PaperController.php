@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Entity\Paper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -39,7 +40,9 @@ class PaperController extends AbstractController
     {
         $paper = new Paper();
         $form = $this->createFormBuilder($paper)
-            ->add('paperFile', VichImageType::class, ['label' => 'Upload file here'])
+            ->add('title', TextareaType::class)
+            ->add('abstract', TextareaType::class)
+            ->add('paperFile', VichImageType::class, ['required' => false, 'label' => 'Presentation'])
             ->add('save', SubmitType::class, ['label' => 'Save paper'])
             ->getForm();
 
@@ -47,6 +50,7 @@ class PaperController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $this->getUser();
+            $paper->setUpdatedAt(new \DateTimeImmutable());
             $user->addPaper($paper);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($paper);

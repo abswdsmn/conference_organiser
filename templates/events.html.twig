@@ -1,0 +1,32 @@
+{# templates/events.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% block content %}
+        <p><a href="{{ path('admin_event') }}" class="btn btn-success">make new event</a></p>
+        <table class="table">
+            <tr>
+                <th>id</th>
+                <th>title</th>
+                <th>description</th>
+                <th>date</th>
+                <th>address</th>
+                <th>postcode</th>
+                <th>actions</th>
+            </tr>
+            {% for event in events %}
+                <tr>
+                    <td>{{ event.id }}</td>
+                    <td>{{ event.title }}</td>
+                    <td>{{ event.description }}</td>
+                    <td>{{ event.date|date("m/d/Y H:i") }}</td>
+                    <td>{{ event.address }}</td>
+                    <td>{{ event.postcode }}</td>
+                    <td>
+                        <a href="{{ path('admin_event_edit', {'id': event.id}) }}"><i class="fas fa-cog"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endblock %}
+{% endblock %}
